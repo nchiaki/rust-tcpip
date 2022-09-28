@@ -4,7 +4,7 @@ mod tcpip;
 
 fn main() {
     let mut dsthost = "chiaki.sakura.ne.jp";
-    let dstport = 80;
+    let mut dstport = 80;
 
     println!("Hello, world!");
 
@@ -14,6 +14,10 @@ fn main() {
     println!("[{}]:{:?}", argc, argv);
     if 2 <= argc
     {dsthost = &argv[1];}
+    if 3 <= argc
+    {
+        dstport =  argv[2].parse().unwrap();
+    }
 
     //let stream = tcpip::connect(dsthost, dstport).unwrap();
     //println!("{:?}", stream);
