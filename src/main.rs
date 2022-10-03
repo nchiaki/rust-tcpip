@@ -24,24 +24,25 @@ fn main() {
     //tcpip::function(stream);
 
     let mut streams = Vec::new();
-    loop {
-        let strm = match tcpip::connect(dsthost, dstport)
-        {
-            Ok(v) => v,
-            Err(e) =>
-            {
-                println!("{}", e);
-                break;
-            },
-        };
-        streams.push(strm);
-    }
+    let mut cnctcnt = 0;
     loop
     {
-        for ix in streams.iter()
+        loop
         {
-            println!("{:?}", ix);
+            let strm = match tcpip::connect(dsthost, dstport)
+            {
+                Ok(v) => v,
+                Err(e) =>
+                {
+                    println!("{}", e);
+                    break;
+                },
+            };
+            streams.push(strm);
+            cnctcnt += 1;
         }
+        println!("{}/{} connects", cnctcnt, streams.len());
+        cnctcnt = 0;
     }
 
 }
