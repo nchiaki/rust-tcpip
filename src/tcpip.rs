@@ -1,5 +1,5 @@
 use std::net::ToSocketAddrs;
-use std::net::TcpStream;
+use std::net::{Shutdown, TcpStream};
 use std::io::{BufReader, BufRead};
 use std::io::BufWriter;
 use std::io::Write;
@@ -39,6 +39,18 @@ pub fn connect(dsthost:&str, dstport:u16) -> Result<TcpStream, String>
         let xer = format!("Illegal destination : {}", dst_host_port);
         Err(xer)
     }
+}
+
+pub fn shutdown(stream:TcpStream) -> Result<(), String>
+{
+    match stream.shutdown(Shutdown::Both)
+    {
+        Ok(_) => return Ok(()),
+        Err(e) => {
+            println!("{:?} shutdown: {}", stream, e);
+            return Err(e.to_string());
+        },
+    };
 }
 
 pub fn function(stream:TcpStream)
