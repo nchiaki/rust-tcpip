@@ -23,13 +23,13 @@ pub fn connect(dsthost:&str, dstport:u16) -> Result<TcpStream, String>
         {
             Ok(stream) =>
             {
-                println!("Connecct success. : {}", dst_host_port);
+                //println!("Connecct success. : {}", dst_host_port);
                 Ok(stream)
             },
             Err(er) =>
             {
                 let xer = format!("Connecct faile. {} : {}", er, dst_host_port);
-                eprintln!("{}",xer);
+                //eprintln!("{}",xer);
                 Err(xer)
             }
         }
@@ -47,7 +47,7 @@ pub fn shutdown(stream:TcpStream) -> Result<(), String>
     {
         Ok(_) => return Ok(()),
         Err(e) => {
-            println!("{:?} shutdown: {}", stream, e);
+            //println!("{:?} shutdown: {}", stream, e);
             return Err(e.to_string());
         },
     };

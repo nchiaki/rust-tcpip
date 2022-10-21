@@ -1,5 +1,8 @@
 use std::env;
 use std::net::TcpStream;
+use std::io::{stdout, Write};
+use std::rc::Rc;
+use std::borrow::Borrow;
 
 mod tcpip;
 
@@ -19,10 +22,6 @@ fn main() {
     {
         dstport =  argv[2].parse().unwrap();
     }
-
-    //let stream = tcpip::connect(dsthost, dstport).unwrap();
-    //println!("{:?}", stream);
-    //tcpip::function(stream);
 
     let mut streams: Vec<TcpStream> = Vec::new();
     let mut cnctcnt = 0;
@@ -48,11 +47,13 @@ fn main() {
                                     Some(v) => v,
                                     None => break,
                                 };
+                                let trgt_info = format!("{:?} {}", trgt, dsthost);
                                 match tcpip::shutdown(trgt)
                                 {
                                     Ok(_) => (),
                                     Err(_) => (),
                                 };
+                                print!("{} conections {:?}\r", streams.len(), trgt_info);stdout().flush();
                             }
                         },
                         None => (),
@@ -60,10 +61,15 @@ fn main() {
                     break;
                 },
             };
+            let strm_info = format!("{:?} {}", strm, dsthost);
             streams.push(strm);
+            print!("{} conections {}\r", streams.len(), strm_info);stdout().flush();
             cnctcnt += 1;
         }
-        println!("{}/{} connects", cnctcnt, streams.len());
+        let dst_info = format!("{}:{}", dsthost, dstport);
+        println!("\n{}/{} connects {}", cnctcnt, streams.len(), dst_info);
+        if cnctcnt == 0 && streams.len() == 0
+        {break;}
         cnctcnt = 0;
     }
 
